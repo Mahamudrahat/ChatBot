@@ -10,7 +10,8 @@
     <div class="card messages" ref="messagesContainer">
       <div v-for="(message, index) in messages" :key="index" class="message">
         <span class="card username">{{ message.username }}</span>
-        <span class="card text-message">{{ message.text }}</span>
+        <span class="card text-message">{{ message.text }}<span class="text-time">{{ message.time }}</span></span>
+        
       </div>
     </div>
     <div class="text-button-area" id="text-button-area">
@@ -24,15 +25,16 @@
 import { ref ,nextTick, onMounted} from 'vue';
 
 const messages = ref([]);
-let userName = ref('Mahamud');
+let userName = ref('Mahamud Hasan');
 let messagesContainer=ref(null)
 const newMessage = ref('');
 
 const sendMessage = (event) => {
   if (newMessage.value.trim()) {
     messages.value.push({
-      username: 'Y',
-      text: newMessage.value
+      username: extractUserNameFirstLetter(userName),
+      text: newMessage.value,
+      time:messageRealTime()
     })
     newMessage.value = '';
     var resizeTextArea = document.getElementById('text-button-area')
@@ -66,6 +68,20 @@ const scrollToBottom = () => {
         messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
       }
     };
+
+function extractUserNameFirstLetter(userName){
+     const nameParts=userName.value.split(' ').map(part=>part.charAt(0));
+     return nameParts.join('');
+}
+
+function messageRealTime(){
+  const now=new Date();
+  const hours=now.getHours();
+  const minutes=now.getMinutes();
+  const currentTime=`${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+  return currentTime;
+}
+ 
 </script>
 
 <style scoped>
@@ -151,7 +167,7 @@ const scrollToBottom = () => {
   overflow-wrap: break-word; /* Same as word-wrap, for compatibility */
   background-color: #e0e0e0; /* Light grey background for the message bubble */
   line-height: 1.5;
-  width: fit-content; /* The width adjusts to fit the content */
+  min-width: 20%; /* The width adjusts to fit the content */
   max-width: 80%; /* Ensure bubbles don't take more than 80% of the container */
   height: fit-content; /* Adjusts height to fit content */
   margin: 10px 0; /* Space between messages */
@@ -199,5 +215,12 @@ textarea {
   height: 50px;
   /* Adjust the image height */
   object-fit: contain;
+}
+.text-time {
+  font-size: 12px; /* Make the time small */
+  color: gray;
+  text-align: right; /* Align the time to the right */
+  display: block;
+  
 }
 </style>
