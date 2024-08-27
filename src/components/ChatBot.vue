@@ -28,6 +28,7 @@ const messages = ref([]);
 let userName = ref('Mahamud Hasan');
 let messagesContainer=ref(null)
 const newMessage = ref('');
+const upComingMessage=ref('');
 
 const sendMessage = (event) => {
   if (newMessage.value.trim()) {
