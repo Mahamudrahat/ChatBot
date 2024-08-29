@@ -12,7 +12,7 @@ import ChatBot from './components/ChatBot.vue'
 export default {
   name: 'App',
   components: {
-    ChatBot,
+    ChatBot
   },
  
 };
